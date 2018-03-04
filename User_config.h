@@ -34,8 +34,8 @@
 /*-------------DEFINE YOUR NETWORK PARAMETERS BELOW----------------*/
 //MQTT Parameters definition
 //#define mqtt_server_name "www.mqtt_broker.com" // instead of defining the server by its IP you can define it by its name, uncomment this line and set the correct MQTT server host name
-#define mqtt_user "your_username" // not compulsory only if your broker needs authentication
-#define mqtt_pass "your_password" // not compulsory only if your broker needs authentication
+#define mqtt_user "jasp" // not compulsory only if your broker needs authentication
+#define mqtt_pass "chumeco1" // not compulsory only if your broker needs authentication
 #define Gateway_Name "OpenMQTTGateway"
 #define WifiManager_password "your_password"
 #define version_Topic "home/" Gateway_Name "/version"
@@ -45,7 +45,7 @@
 #define will_Message "Offline"
 #define Gateway_AnnouncementMsg "Online"
 //#define MDNS_SD //comment if you don't want to use mdns for discovering automatically your ip server, please note that MDNS with ESP32 can cause the BLE to not work
-char mqtt_server[40] = "192.168.1.17";
+char mqtt_server[40] = "192.168.1.72";
 char mqtt_port[6] = "1883";
 
 //set minimu quality of signal so it ignores AP's under that quality
@@ -55,8 +55,8 @@ char mqtt_port[6] = "1883";
 /*-------------DEFINE YOUR NETWORK PARAMETERS BELOW----------------*/
 // Update these with values suitable for your network.
 #if defined(ESP32) || defined(ESPWifiManualSetup) // for nodemcu, weemos and esp8266
-  #define wifi_ssid "wifi ssid"
-  #define wifi_password "wifi password"
+  #define wifi_ssid "Hidden network"
+  #define wifi_password "Volpina677"
 #else // for arduino + W5100
   const byte mac[] = {  0xDE, 0xED, 0xBA, 0xFE, 0x54, 0x95 }; //W5100 ethernet shield mac adress
 #endif
@@ -82,83 +82,8 @@ const byte subnet[] = { 255, 255, 255, 0 }; //ip adress
 
 /*-------------DEFINE THE MODULES YOU WANT BELOW----------------*/
 //Addons and module management, comment the Z line and the config file if you don't use
-#ifdef ESP8266 // for nodemcu, weemos and esp8266
-  #define ZgatewayRF
-  #include "config_RF.h"
-  //#define ZgatewayRF2
-  //#define ZgatewaySRFB
-  //#include "config_SRFB.h"
   #define ZgatewayIR
   #include "config_IR.h"
-  #define ZgatewayBT
-  #include "config_BT.h"
-  //#define ZsensorINA226
-  //#include "config_INA226.h"
-  //#define ZsensorHCSR501
-  //#include "config_HCSR501.h"
-  //#define ZsensorADC
-  //#include "config_ADC.h"
-  //#define ZsensorBH1750
-  //#include "config_BH1750.h"
-  //#define ZsensorTSL2561
-  //#include "config_TSL2561.h"
-  //#define ZsensorBME280
-  //#include "config_BME280.h"
-  //#define ZsensorDHT // If you uncomment this you can't use I2C due to the fact that I2C use also D1
-  //#include "config_DHT.h"
-  //#define ZgatewayRFM69 // If you uncomment this you can't use RF and BT due to the fact that RF use also D8 and BT use also D6/D7
-  //#include "config_RFM69.h"
-#elif ESP32
-  #define ZgatewayRF
-  #include "config_RF.h"
-  //#define ZgatewayRF2
-  //#define ZgatewayIR
-  //#include "config_IR.h"
-  #define ZgatewayBT
-  #include "config_BT.h"
-  //#define ZsensorINA226
-  //#include "config_INA226.h"
-  //#define ZsensorHCSR501
-  //#include "config_HCSR501.h"
-  //#define ZsensorADC
-  //#include "config_ADC.h"
-  //#define ZsensorBH1750
-  //#include "config_BH1750.h"
-  //#define ZsensorBME280
-  //#include "config_BME280.h"
-  //#define ZsensorDHT // If you uncomment this you can't use I2C due to the fact that I2C use also D1
-  //#include "config_DHT.h"
-  //#define ZgatewayRFM69 // If you uncomment this you can't use RF and BT due to the fact that RF use also D8 and BT use also D6/D7
-  //#include "config_RFM69.h"
-#else // for arduino + W5100
-  #define ZgatewayRF
-  #include "config_RF.h"
-  //#define ZgatewayRF2 // too big for UNO
-  //#define ZgatewayRFM69 not tested
-  //#include "config_RFM69.h"
-  #define ZgatewayIR
-  #include "config_IR.h"
-  #define ZgatewayBT
-  #include "config_BT.h"
-  //#define ZsensorINA226
-  //#include "config_INA226.h"
-  //#define ZsensorDHT
-  //#include "config_DHT.h"
-  //#define ZsensorBH1750
-  //#include "config_BH1750.h"
-  //#define ZsensorTSL2561
-  //#include "config_TSL2561.h"
-  //#define ZsensorBME280
-  //#include "config_BME280.h"
-  //#define ZsensorHCSR501
-  //#include "config_HCSR501.h"
-  //#define ZsensorADC
-  //#include "config_ADC.h"
-  //#define ZgatewayRFM69 not tested
-  //#include "config_RFM69.h" 
-  //#define ZsensorINA226
-  //#include "config_INA226.h" 
-#endif
 /*----------------------------OTHER PARAMETERS-----------------------------*/
 /*-------------------CHANGING THEM IS NOT COMPULSORY-----------------------*/
 /*----------------------------USER PARAMETERS-----------------------------*/

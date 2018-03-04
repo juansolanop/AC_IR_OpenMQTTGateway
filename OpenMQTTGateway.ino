@@ -60,6 +60,7 @@
 #include <PubSubClient.h>
 #include <ArduinoJson.h>
 
+
 // array to store previous received RFs, IRs codes and their timestamps
 #if defined(ESP8266) || defined(ESP32)
 #define array_size 12
@@ -73,7 +74,7 @@ unsigned long ReceivedSignal[array_size][2] ={{0,0},{0,0},{0,0},{0,0}};
 //adding this to bypass the problem of the arduino builder issue 50
 void callback(char*topic, byte* payload,unsigned int length);
 
-#ifdef ESP32
+#ifdef ESP32  
   #include <WiFi.h>
   #include <ArduinoOTA.h>
   WiFiClient eClient;
@@ -146,9 +147,6 @@ boolean reconnect() {
       client.publish(version_Topic,OMG_VERSION,will_Retain);
       //Subscribing to topic
       if (client.subscribe(subjectMQTTtoX)) {
-        #ifdef ZgatewayRF
-          client.subscribe(subjectMultiGTWRF);
-        #endif
         #ifdef ZgatewayIR
           client.subscribe(subjectMultiGTWIR);
         #endif
@@ -286,38 +284,12 @@ void setup()
 
   lastReconnectAttempt = 0;
 
-  #ifdef ZsensorBME280
-    setupZsensorBME280();
-  #endif
-  #ifdef ZsensorBH1750
-    setupZsensorBH1750();
-  #endif
-  #ifdef ZsensorTSL2561
-    setupZsensorTSL2561();
-  #endif
+
   #ifdef ZgatewayIR
     setupIR();
   #endif
-  #ifdef ZgatewayRF
-    setupRF();
-  #endif
-  #ifdef ZgatewayRF2
-    setupRF2();
-  #endif
-  #ifdef ZgatewaySRFB
-    setupSRFB();
-  #endif
-  #ifdef ZgatewayBT
-    setupBT();
-  #endif
-  #ifdef ZgatewayRFM69
-    setupRFM69();
-  #endif
-  #ifdef ZsensorINA226
-    setupINA226();
-  #endif
-  #ifdef ZsensorHCSR501
-    setupHCSR501();
+  #ifdef ZgatewaySensor
+    Sensor_setup();
   #endif
 }
 
@@ -537,47 +509,6 @@ void loop()
       ArduinoOTA.handle();
     #endif
 
-    #ifdef ZsensorBME280
-      MeasureTempHumAndPressure(); //Addon to measure Temperature, Humidity, Pressure and Altitude with a Bosch BME280
-    #endif
-    #ifdef ZsensorBH1750
-      MeasureLightIntensity(); //Addon to measure Light Intensity with a BH1750
-    #endif
-    #ifdef ZsensorTSL2561
-      MeasureLightIntensityTSL2561();
-    #endif
-    #ifdef ZsensorDHT
-      MeasureTempAndHum(); //Addon to measure the temperature with a DHT
-    #endif
-    #ifdef ZsensorINA226
-      MeasureINA226(); //Addon to measure the temperature with a DHT
-    #endif
-    #ifdef ZsensorHCSR501
-      MeasureHCSR501();
-    #endif
-    #ifdef ZsensorADC
-      MeasureADC(); //Addon to measure the analog value of analog pin
-    #endif
-    // Receive loop, if data received by RF433 or IR send it by MQTT
-    #ifdef ZgatewayRF
-      if(RFtoMQTT()){
-      trc(F("RFtoMQTT OK"));
-      //GREEN ON
-      digitalWrite(led_receive, LOW);
-      timer_led_receive = millis();
-      }
-    #endif
-    #ifdef ZgatewayRF2
-      if(RF2toMQTT()){
-      trc(F("RF2toMQTT OK"));
-      digitalWrite(led_receive, LOW);
-      timer_led_receive = millis();
-      }
-    #endif
-    #ifdef ZgatewaySRFB
-      if(SRFBtoMQTT())
-      trc(F("SRFBtoMQTT OK"));
-    #endif
     #ifdef ZgatewayIR
       if(IRtoMQTT())      {
       trc(F("IRtoMQTT OK"));
@@ -586,15 +517,13 @@ void loop()
       delay(100);
       }
     #endif
-    #ifdef ZgatewayBT
-      #ifndef ESP32
-        if(BTtoMQTT())
-        trc(F("BTtoMQTT OK"));
-      #endif
-    #endif
-    #ifdef ZgatewayRFM69
-      if(RFM69toMQTT())
-      trc(F("RFM69toMQTT OK"));
+    #ifdef ZgatewaySensor
+      if(Sensorloop())      {
+      trc(F("SensortoMQTT OK"));
+      digitalWrite(led_receive, LOW);
+      timer_led_receive = millis();
+      delay(100);
+      }
     #endif
     #if defined(ESP8266) || defined(ESP32)
     unsigned long now = millis();
@@ -666,20 +595,8 @@ void receivingMQTT(char * topicOri, char * datacallback) {
    }
 //YELLOW ON
 digitalWrite(led_send, LOW);
-#ifdef ZgatewayRF
-  MQTTtoRF(topicOri, datacallback);
-#endif
-#ifdef ZgatewayRF2
-  MQTTtoRF2(topicOri, datacallback);
-#endif
-#ifdef ZgatewaySRFB
-  MQTTtoSRFB(topicOri, datacallback);
-#endif
 #ifdef ZgatewayIR
   MQTTtoIR(topicOri, datacallback);
-#endif
-#ifdef ZgatewayRFM69
-  MQTTtoRFM69(topicOri, datacallback);
 #endif
 //YELLOW OFF
 digitalWrite(led_send, HIGH);
@@ -721,3 +638,8 @@ void trc(String msg){
   Serial.println(msg);
   }
 }
+
+
+
+
+

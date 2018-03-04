@@ -51,8 +51,8 @@ irrecv.enableIRIn(); // Start the receiver
   
 trc(F("IR_EMITTER_PIN "));
 trc(String(IR_EMITTER_PIN));
-trc(F("IR_RECEIVER_PIN "));
-trc(String(IR_RECEIVER_PIN));
+//trc(F("IR_RECEIVER_PIN "));
+//trc(String(IR_RECEIVER_PIN));
 trc(F("ZgatewayIR setup done "));
 
 }
